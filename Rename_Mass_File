@@ -1,0 +1,43 @@
+function createFolder($textenter, $textout, $FolderBrowser){
+    $enter = $Global:textenter.Text
+    $out = $Global:textout.Text
+    $path = $Global:FolderBrowser.SelectedPath
+    $test = dir $path | Get-ChildItem | Where-Object{$_.Name -like $zae+'*'} | % {$newname = ([String]$_).Replace($enter,$out); Rename-item $_ $newname}
+}
+#Form Create Folder
+ $ButtonOk = New-Object System.Windows.Forms.Button
+ $ButtonOk.Location = New-Object System.Drawing.Point(300,200)
+ $ButtonOk.Size = New-Object System.Drawing.Size(75,23)
+ $ButtonOk.Text = "OK"
+ $ButtonOk.add_click({createFolder($textenter.Text, $textout.Text, $FolderBrowser.SelectedPath)})
+ $ButtonOk.DialogResult = [System.Windows.Forms.DialogResult]::OK
+ $labelenter = New-Object System.Windows.Forms.Label
+ $labelenter.location = New-Object System.Drawing.Point(150,70)
+ $labelenter.size = New-Object System.Drawing.Size(150, 30)
+ $labelenter.Text = "Quel est le nom à modifier :"
+ $labelout = New-Object System.Windows.Forms.Label
+ $labelout.location = New-Object System.Drawing.Point(150,140)
+ $labelout.size = New-Object System.Drawing.Size(150, 30)
+ $labelout.Text = "Par quel mot voulez-vous le modifier :"
+ $textenter = New-Object System.Windows.Forms.TextBox
+ $textenter.Location = New-Object System.Drawing.Point(300,70)
+ $textenter.Size = New-Object System.Drawing.Size(200,300)
+ $textout = New-Object System.Windows.Forms.TextBox
+ $textout.Location = New-Object System.Drawing.Point(300,140)
+ $textout.Size = New-Object System.Drawing.Size(200,300)
+ $FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
+        RootFolder = 'Desktop'
+        ShowNewFolderButton = $false
+}
+ [void]$FolderBrowser.ShowDialog()
+ $ListForm = New-Object System.Windows.Forms.Form
+ $ListForm.Text = "Création d'un dossier et fichier"
+ $ListForm.Size = New-Object System.Drawing.Size(600,300)
+ $ListForm.StartPosition = "CenterScreen"
+ $ListForm.TopMost = $True
+ $ListForm.Controls.Add($labelenter)
+ $ListForm.Controls.Add($textenter)
+ $ListForm.Controls.Add($labelout)
+ $ListForm.Controls.Add($textout)
+ $ListForm.Controls.Add($ButtonOk)
+$ListForm.ShowDialog()
